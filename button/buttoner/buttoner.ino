@@ -7,7 +7,10 @@ const int output3 = 12;
 
 const int outputs[] = {output1, output2, output3};
 
-int pressed = 1;
+const long bounce = 50; // time in milliseconds to wait
+long lastCheck = 0;
+
+int buttonState = HIGH;
 boolean lit = false;
 
 void setup() {
@@ -23,18 +26,32 @@ void setup() {
   pinMode(boardLight, OUTPUT);
 }
 
-void loop() {
-  int oldPressed = pressed;
-  pressed = digitalRead(button);
-  
-  if(pressed == 1) {
-    lit = !lit;
-    for(int i = 0; i < sizeof(outputs)/sizeof(int); i++) {
-      pinMode(outputs[i], OUTPUT);
-      digitalWrite(outputs[i], lit);
+void loop() {  
+  // If we last checked longer than our bounce time,
+  // check for the state.
+  if(millis() - lastCheck > bounce) {
+    lastCheck = millis();
+    
+    // If state changed, update variables.
+    int pressed = digitalRead(button);
+    if(buttonState != pressed) {
+      buttonState = pressed;
+      
+      // If our new state is high, flip colors.
+      if(buttonState == HIGH) {
+        lit = !lit;
+        updateLights(lit);
+      }
     }
-  
   }
   
    delay(1);
+}
+
+// Writes the state to each light.
+void updateLights(int state) {
+  for(int i = 0; i < sizeof(outputs)/sizeof(int); i++) {
+    pinMode(outputs[i], OUTPUT);
+    digitalWrite(outputs[i], state);
+  }
 }
