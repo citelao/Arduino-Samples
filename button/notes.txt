@@ -1,1 +1,0 @@
-- The included buttons have moderate to severe bounce issues.
