@@ -8,6 +8,10 @@ These are my notes and first impressions using Arduino.
 - **Button**
 	- **Buttoner**: toggles series of lights based on button
 	- **Counter**: counts in one-hot or binary method.
+- **Buzzer**: plays increasing tones.
+- **Thermistor**
+	- **Thermistor.ino**: "measures" temperature to wildly weird results
+	- **Thermistor_comparison.ino**: taken from the internet to corroborate my data.
 
 # Notes #
 
@@ -18,3 +22,8 @@ These are my notes and first impressions using Arduino.
 - Reading resistors makes me feel smart!
 - I only have 5 LEDs and cannot make a full byte binary counter.
 - I am afraid of bending the provided wires and resistors.
+
+
+- Buzzer works using `tone()` library
+- Photoresistor is included (!!)
+- Thermistor *is* sensitive enough to use, though we do not know its B-coefficient.

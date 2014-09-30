@@ -1,11 +1,12 @@
 const int boardLight = 13;
 
-const int button = 4;
-const int output1 = 10;
-const int output2 = 11;
-const int output3 = 12;
+const int button = 3;
+const int output1 = 8;
+const int output2 = 9;
+const int output3 = 10;
+const int output4 = 11;
 
-const int outputs[] = {output1, output2, output3};
+const int outputs[] = {output1, output2, output3, output4};
 const int outputsLength = sizeof(outputs)/sizeof(int);
 
 const long bounce = 50; // time in milliseconds to wait
@@ -17,14 +18,14 @@ int buttonState = HIGH;
 unsigned int counter = 0;
 
 void setup() {
-//  Serial.begin(9600);
+  Serial.begin(9600);
   
   pinMode(button, INPUT);
   
   for(int i = 0; i < sizeof(outputs)/sizeof(int); i++) {
     pinMode(outputs[i], OUTPUT);
   }
-  binary(counter);
+  oneHot(counter);
   
   pinMode(boardLight, OUTPUT);
 }
@@ -41,6 +42,7 @@ void loop() {
       updated = true;
     }
     
+    Serial.println(counter);    
     lastBounceCheck = millis();
   }
   
@@ -49,6 +51,7 @@ void loop() {
     (updated || millis() - lastUpdateCheck > hold)) {
     ++counter;
     binary(counter);
+    digitalWrite(boardLight, HIGH);
     
     lastUpdateCheck = millis();
   }
@@ -65,8 +68,10 @@ void oneHot(int counter) {
 }
 
 void binary(int counter) {
-  for(int i = 0; i < outputsLength; i++) {    
-    boolean state = ((counter >> (i)) % 2 != 0) ? HIGH : LOW;
+  int power = 1;
+  for(int i = 0; i < outputsLength; i++) {
+    power << 1;
+    boolean state = (counter & power) ? HIGH : LOW;
     digitalWrite(outputs[i], state);
   }
 }
